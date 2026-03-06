@@ -30,7 +30,7 @@ This project demonstrates how to build **modern AI agents using tools, retrieval
 
 ---
 
-# 🏗 System Architecture
+
 # 🎩 Alfred AI – A Tool-Using Local AI Assistant
 
 Alfred AI is a **LangGraph-based conversational agent** powered by a **local LLM (Ollama)** that can retrieve structured data, search the web for unknown information, fetch recent news, and maintain conversation memory.
@@ -79,7 +79,11 @@ Tool Router
 ↓
 Local LLM (Ollama)
 
-
+alfred-ai-agent/
+│
+├── app.py # Main chatbot application
+├── tools.py # Tool implementations (retriever, web search, news)
+├── retriever.py # Dataset loading and retrieval logic
 # 🛠 Tech Stack
 
 - Python
