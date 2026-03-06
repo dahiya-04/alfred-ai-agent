@@ -64,26 +64,15 @@ This project demonstrates how to build **modern AI agents using tools, retrieval
 ---
 
 # 🏗 System Architecture
-User
-↓
-LangGraph Agent
-↓
-Conversation Memory (Checkpointer)
-↓
-Assistant Node (LLM)
-↓
-Tool Router
-├── Guest Retriever Tool (RAG)
-├── Web Search Tool
-└── News Tool
-↓
-Local LLM (Ollama)
+User ↓ LangGraph Agent ↓ Memory ↓ Assistant ↓ Tools ↓ LLM
 
-alfred-ai-agent/
-│
-├── app.py # Main chatbot application
-├── tools.py # Tool implementations (retriever, web search, news)
-├── retriever.py # Dataset loading and retrieval logic
+alfred-ai-agent
+── app.py # Main chatbot application 
+
+── tools.py # Tool implementations (web search, news and other tools)
+
+── retriever.py # Dataset loading and retrieval logic
+
 # 🛠 Tech Stack
 
 - Python
