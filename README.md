@@ -92,7 +92,7 @@ Local LLM (Ollama)
 - Sentence Transformers (optional upgrade)
 
 ---
-💬 Example Interaction
+**💬 Example Interaction**
 
 
 🎩 Alfred: Hello, I am Alfred. How can I assist you today?
@@ -134,3 +134,18 @@ The captain of the England national cricket team was Eoin Morgan during the
 
 You: exit
 Alfred: Goodbye.
+
+
+**🎯 Learning Goals**
+
+This project demonstrates key AI engineering concepts:
+
+Tool-using agents
+
+Retrieval-Augmented Generation (RAG)
+
+Conversation memory
+
+Local LLM deployment
+
+Graph-based agent orchestration
