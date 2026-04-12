@@ -1,9 +1,16 @@
+import os
 from langchain_core.tools import tool
 from langchain_community.tools import DuckDuckGoSearchRun
 import random
 from huggingface_hub import list_models
 
-search = DuckDuckGoSearchRun()
+# Use Tavily when TAVILY_API_KEY is set; otherwise fall back to DuckDuckGo
+_tavily_api_key = os.environ.get("TAVILY_API_KEY")
+if _tavily_api_key:
+    from langchain_community.tools.tavily_search import TavilySearchResults
+    search = TavilySearchResults(max_results=5)
+else:
+    search = DuckDuckGoSearchRun()
 
 @tool
 def web_search_tool(query: str) -> str:
