@@ -1,0 +1,7 @@
+langchain-core
+langchain-community
+langchain-ollama
+langgraph
+duckduckgo-search
+huggingface_hub
+tavily-python
