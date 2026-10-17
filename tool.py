@@ -1,25 +1,36 @@
-from langchain_core.tools import tool
-from langchain_community.tools import DuckDuckGoSearchRun
+from langchain_core.tools import tool, StructuredTool
+from search_provider import create_search
 import random
 from huggingface_hub import list_models
 
-search = DuckDuckGoSearchRun()
+search = create_search()
 
-@tool
-def web_search_tool(query: str) -> str:
+def _web_search(query: str) -> str:
     """Search the web for information about unfamiliar guests."""
     return search.run(query)
+
+
+async def _aweb_search(query: str) -> str:
+    return await search.arun(query)
+
+
+web_search_tool = StructuredTool.from_function(
+    func=_web_search,
+    coroutine=_aweb_search,
+    name="web_search_tool",
+    handle_tool_error=True,
+)
 
 @tool
 def latest_news_tool(topic: str) -> str:
     """
     Get the latest news about a specific topic.
     """
-    
+
     query = f"latest news about {topic}"
-    
+
     results = search.run(query)
-    
+
     return results
 
 
@@ -50,5 +61,5 @@ def hub_stats_tool(author: str) -> str:
             return f"No models found for author {author}."
     except Exception as e:
         return f"Error fetching models for {author}: {str(e)}"
-    
+
 

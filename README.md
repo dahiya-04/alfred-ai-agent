@@ -29,7 +29,7 @@ This project demonstrates how to build **modern AI agents using tools, retrieval
   The LLM decides when to call tools instead of hallucinating answers.
 
 - ⚡ **Local LLM**  
-  Runs entirely locally using **Ollama**, without relying on cloud APIs.
+  Runs model inference locally using **Ollama**. Web tools contact external services.
 
 ---
 
@@ -39,7 +39,9 @@ User ↓ LangGraph Agent ↓ Memory ↓ Assistant ↓ Tools ↓ LLM
 alfred-ai-agent
 ── app.py # Main chatbot application 
 
-── tools.py # Tool implementations (web search, news and other tools)
+── tool.py # Tool implementations (web search, news and other tools)
+
+── search_provider.py # DuckDuckGo and Parallel Search MCP backends
 
 ── retriever.py # Dataset loading and retrieval logic
 
@@ -53,6 +55,57 @@ alfred-ai-agent
 - BM25 Retriever
 - DuckDuckGo Search
 - Sentence Transformers (optional upgrade)
+
+## Run Alfred
+
+Use Python 3.11 or newer and an [Ollama](https://ollama.com/) server:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+ollama pull qwen2.5:1.5b
+python app.py
+```
+
+The first run downloads the guest dataset from Hugging Face. Ollama must be
+listening at `http://127.0.0.1:11434`.
+
+### Choose a web-search provider
+
+DuckDuckGo remains the default, with no API key needed. To use free
+[Parallel Search MCP](https://docs.parallel.ai/integrations/mcp/search-mcp)
+instead, set the provider before starting Alfred:
+
+```bash
+ALFRED_SEARCH_PROVIDER=parallel python app.py
+```
+
+Parallel's anonymous endpoint uses Fast mode for search and requires no account or
+API key. Alfred sends the search query to `https://search.parallel.ai/mcp` over
+Streamable HTTP and returns the source excerpts and URLs to the agent's existing
+`web_search_tool`. The standalone `latest_news_tool` uses the same backend.
+Queries leave your machine; anonymous service limits apply.
+
+Set `ALFRED_SEARCH_PROVIDER=duckduckgo` to select DuckDuckGo explicitly, or
+`ALFRED_SEARCH_PROVIDER=disabled` to prevent web-search requests. Invalid provider
+names fail at startup. Parallel requests have a 30-second deadline; errors are
+returned to the agent without switching providers. Async callers can use
+`web_search_tool.ainvoke(...)`, which propagates cancellation to the MCP client.
+
+### Search integration tests
+
+The offline suite needs neither Ollama nor the guest dataset. In a fresh virtual
+environment, install the smaller search dependency set and run:
+
+```bash
+python -m pip install -r requirements-search.txt
+python -m unittest discover -s tests -v
+```
+
+These tests exercise the real graph and MCP transport with scripted model
+decisions and HTTP responses, including provider selection, result consumption,
+errors, timeouts and cancellation.
 
 ---
 **💬 Example Interaction**

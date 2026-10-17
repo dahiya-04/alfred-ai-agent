@@ -1,0 +1,4 @@
+-r requirements-search.txt
+langchain-ollama>=1.0,<2
+datasets>=3,<5
+rank-bm25>=0.2,<0.3
